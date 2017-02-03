@@ -4,7 +4,7 @@ A application to change the key colors on a Logitech G213 Prodigy Gaming Keyboar
 ## What it does
 G213Colors lets you set the color(s) and certain effects of the illuminated keys on a G213 keyboard under Linux.
 
-Since Logitech is mostly ignoring the Linux market with their "Logitech Gaming Software" but i also wanted to use my expensive new keyboard also under linux without tolerating the color cycling animation all the time. So i searched through the internet and added a gui to SebiTimeWaster's project
+Since Logitech is mostly ignoring the Linux market with their "Logitech Gaming Software" but i also wanted to use my expensive new keyboard also under linux without tolerating the color cycling animation all the time. So i searched on the internet and added a gui to [SebiTimeWaster's project](https://github.com/SebiTimeWaster/G213Colors) for comfortable usage.
 
 G213Colors was built and tested under Linux for the G213 keyboard specifically, but after some adaptation it could potentially be run under other OS'es and used for other Logitech keyboards as well. 
 Please understand that i do not support any such adaptation, if you want to do it **you are on your own**.
