@@ -42,11 +42,6 @@ breatheCommand = "11ff0c3a0002{}{}006400000000000000"
 cycleCommand   = "11ff0c3a0003ffffff0000{}64000000000000"
 device         = ""               # device resource
 isDetached     = False            # If kernel driver needs to be reattached
-numArguments   = len(sys.argv)    # number of arguments given
-if numArguments > 1:
-    option     = str(sys.argv[1]) # option to use
-else:
-    option     = ""
 
 
 def connectG():
@@ -80,45 +75,3 @@ def sendBreatheCommand(colorHex, speed):
 
 def sendCycleCommand(speed):
     sendData(cycleCommand.format(str(format(speed, '04x'))))
-
-def printInfo():
-    print("G213Colors - Changes the key colors on a Logitech G213 Prodigy Gaming Keyboard")
-    print("\nOptions:")
-    print("-c                        Set the standard color (white)")
-    print("-c <color>                Set a custom color")
-    print("-c <color1> ... <color5>  Set custom colors for the 5 segments")
-    print("-b <color> <time>         Sets a color breathing animation")
-    print("-x <time>                 Sets a color cycling animation")
-    print("\nPlease note:")
-    print("* Color is a hex encoded color in the format RRGGBB")
-    print("  i.e. ff0000 is red, 00ff00 is green and so on,")
-    print("  abbreviated formats are not allowed")
-    print("* Time is in milliseconds, range: 32 - 65535")
-
-
-if "-" not in option:
-    # no option found, exit
-    printInfo()
-    sys.exit(1)
-
-connectG()
-
-if "c" in option:
-    if numArguments == 2:
-        sendColorCommand(standardColor)
-    elif numArguments == 3:
-        sendColorCommand(str(sys.argv[2]))
-    elif numArguments == 7:
-        for index in range(1, 6):
-            sendColorCommand(str(sys.argv[index + 1]), index)
-            sleep(0.01)
-    else:
-        printInfo()
-elif "b" in option and numArguments == 4:
-    sendBreatheCommand(str(sys.argv[2]), int(sys.argv[3]))
-elif "x" in option and numArguments == 3:
-    sendCycleCommand(int(sys.argv[2]))
-else:
-    printInfo()
-
-disconnectG()
