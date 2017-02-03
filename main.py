@@ -1,7 +1,5 @@
 import G213Colors
 import gi
-import os
-import json
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio
 NAME = "G213Colors"
@@ -52,6 +50,7 @@ class Window(Gtk.Window):
             self.sendCycle()
         elif self.stackName == "breathe":
             self.sendBreathe()
+            
     def on_ok_button_clicked(self, button):
         global hexColor
         global ctime
@@ -81,7 +80,7 @@ class Window(Gtk.Window):
         staticColorButton.connect("color-set", self.color_set)
         vBoxStatic.add(staticColorButton)
 
-        self.stack.add_titled(vBoxStatic, "static", "Statisch")
+        self.stack.add_titled(vBoxStatic, "static", "Static")
 
         ###CYCLE TAB
         vBoxCycle = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
