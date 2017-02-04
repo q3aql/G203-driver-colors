@@ -2,7 +2,7 @@ import G213Colors
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio
-NAME = "G213Colors"
+NAME = "G213 Colors"
 
 
 
@@ -50,7 +50,7 @@ class Window(Gtk.Window):
             self.sendCycle()
         elif self.stackName == "breathe":
             self.sendBreathe()
-            
+
     def on_ok_button_clicked(self, button):
         global hexColor
         global ctime
