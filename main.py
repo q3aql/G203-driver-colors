@@ -8,22 +8,24 @@ NAME = "G213 Colors"
 
 class Window(Gtk.Window):
 
-    hexColor = "000000"
+    hexColorStatic = "000000"
+    hexColorBreathe = "000000"
     ctime = "500"
     btime = "500"
 
     def sendStatic(self):
-        global hexColor
+        global hexColorStatic
         myG = G213Colors
         myG.connectG()
-        myG.sendColorCommand(hexColor)
+        myG.sendColorCommand(hexColorStatic)
         myG.disconnectG()
 
     def sendBreathe(self):
-        global hexColor
+        global hexColorBreathe
+        print(hexColorBreathe)
         myG = G213Colors
         myG.connectG()
-        myG.sendBreatheCommand(hexColor, btime)
+        myG.sendBreatheCommand(hexColorBreathe, btime)
         myG.disconnectG()
 
     def sendCycle(self):
@@ -33,14 +35,21 @@ class Window(Gtk.Window):
         myG.sendCycleCommand(ctime)
         myG.disconnectG()
 
-    def color_set(self, colorbutton):
-        global hexColor
+    def color_set_static(self, colorbutton):
+        global hexColorStatic
         color = colorbutton.get_rgba()
         red = int(color.red * 255)
         green = int(color.green * 255)
         blue = int(color.blue * 255)
-        hexColor = "%02x%02x%02x" % (red, green, blue)
-        print(hexColor)
+        hexColorStatic = "%02x%02x%02x" % (red, green, blue)
+
+    def color_set_breathe(self, colorbutton):
+        global hexColorBreathe
+        color = colorbutton.get_rgba()
+        red = int(color.red * 255)
+        green = int(color.green * 255)
+        blue = int(color.blue * 255)
+        hexColorBreathe = "%02x%02x%02x" % (red, green, blue)
 
     def sendManager(self):
         self.stackName = self.stack.get_visible_child_name()
@@ -52,7 +61,6 @@ class Window(Gtk.Window):
             self.sendBreathe()
 
     def on_ok_button_clicked(self, button):
-        global hexColor
         global ctime
         global btime
         ctime = self.sbCycle.get_value_as_int()
@@ -77,7 +85,7 @@ class Window(Gtk.Window):
         ###STATIC TAB
         vBoxStatic = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         staticColorButton = Gtk.ColorButton()
-        staticColorButton.connect("color-set", self.color_set)
+        staticColorButton.connect("color-set", self.color_set_static)
         vBoxStatic.add(staticColorButton)
 
         self.stack.add_titled(vBoxStatic, "static", "Static")
@@ -94,7 +102,7 @@ class Window(Gtk.Window):
 
         vBoxBreathe = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         breatheColorButton = Gtk.ColorButton()
-        breatheColorButton.connect("color-set", self.color_set)
+        breatheColorButton.connect("color-set", self.color_set_breathe)
         vBoxBreathe.add(breatheColorButton)
         vBoxBreathe.add(self.sbCycle)
         self.adjBCycle = Gtk.Adjustment(5000, 500, 65535, 100, 100, 0)
