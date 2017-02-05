@@ -27,7 +27,6 @@ import sys
 import usb.core
 import usb.util
 import binascii
-from time import sleep
 
 
 standardColor  = 'ffb4aa'         # Standard color, i found this color to produce a white color on my G213
