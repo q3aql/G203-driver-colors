@@ -1,55 +1,61 @@
 import G213Colors
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk
+from time import sleep
 NAME = "G213 Colors"
-
 
 
 class Window(Gtk.Window):
 
-    hexColorStatic = "000000"
-    hexColorBreathe = "000000"
-    ctime = "500"
-    btime = "500"
+    def btnGetHex(self, btn):
+        color = btn.get_rgba()
+        red = int(color.red * 255)
+        green = int(color.green * 255)
+        blue = int(color.blue * 255)
+        hexColor = "%02x%02x%02x" % (red, green, blue)
+        return hexColor
+
+    def sbGetValue(self, sb):
+        return sb.get_value_as_int()
 
     def sendStatic(self):
-        global hexColorStatic
         myG = G213Colors
         myG.connectG()
-        myG.sendColorCommand(hexColorStatic)
+        myG.sendColorCommand(self.btnGetHex(self.staticColorButton))
         myG.disconnectG()
 
     def sendBreathe(self):
-        global hexColorBreathe
-        print(hexColorBreathe)
         myG = G213Colors
         myG.connectG()
-        myG.sendBreatheCommand(hexColorBreathe, btime)
+        myG.sendBreatheCommand(self.btnGetHex(self.breatheColorButton), self.sbGetValue(self.sbBCycle))
         myG.disconnectG()
 
     def sendCycle(self):
-        global time
         myG = G213Colors
         myG.connectG()
-        myG.sendCycleCommand(ctime)
+        myG.sendCycleCommand(self.sbGetValue(self.sbCycle))
         myG.disconnectG()
 
-    def color_set_static(self, colorbutton):
-        global hexColorStatic
-        color = colorbutton.get_rgba()
-        red = int(color.red * 255)
-        green = int(color.green * 255)
-        blue = int(color.blue * 255)
-        hexColorStatic = "%02x%02x%02x" % (red, green, blue)
+    def sendSegments(self):
+        myG = G213Colors
+        myG.connectG()
+        for i in range(1, 6):
+            print(i)
+            print(self.btnGetHex(self.segmentColorBtns[i-1]))
+            myG.sendColorCommand(self.btnGetHex(self.segmentColorBtns[i -1]), i)
+            sleep(0.01)
+        myG.disconnectG()
 
-    def color_set_breathe(self, colorbutton):
-        global hexColorBreathe
-        color = colorbutton.get_rgba()
-        red = int(color.red * 255)
-        green = int(color.green * 255)
-        blue = int(color.blue * 255)
-        hexColorBreathe = "%02x%02x%02x" % (red, green, blue)
+    def color_set_segments(self, colorbutton):
+        global hexColorSegments
+        i = 0
+        for btn in self.segmentColorButtons:
+            colors = btn.get_rgba()
+            red = int(color.red * 255)
+            green = int(color.green * 255)
+            blue = int(color.blue * 255)
+            hexColorSegments[i] = "%02x%02x%02x" % (red, green, blue)
 
     def sendManager(self):
         self.stackName = self.stack.get_visible_child_name()
@@ -59,6 +65,8 @@ class Window(Gtk.Window):
             self.sendCycle()
         elif self.stackName == "breathe":
             self.sendBreathe()
+        elif self.stackName == "segments":
+            self.sendSegments()
 
     def on_ok_button_clicked(self, button):
         global ctime
@@ -84,9 +92,8 @@ class Window(Gtk.Window):
 
         ###STATIC TAB
         vBoxStatic = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-        staticColorButton = Gtk.ColorButton()
-        staticColorButton.connect("color-set", self.color_set_static)
-        vBoxStatic.add(staticColorButton)
+        self.staticColorButton = Gtk.ColorButton()
+        vBoxStatic.add(self.staticColorButton)
 
         self.stack.add_titled(vBoxStatic, "static", "Static")
 
@@ -101,15 +108,20 @@ class Window(Gtk.Window):
         ###BREATHE TAB
 
         vBoxBreathe = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-        breatheColorButton = Gtk.ColorButton()
-        breatheColorButton.connect("color-set", self.color_set_breathe)
-        vBoxBreathe.add(breatheColorButton)
-        vBoxBreathe.add(self.sbCycle)
+        self.breatheColorButton = Gtk.ColorButton()
+        vBoxBreathe.add(self.breatheColorButton)
         self.adjBCycle = Gtk.Adjustment(5000, 500, 65535, 100, 100, 0)
         self.sbBCycle = Gtk.SpinButton()
         self.sbBCycle.set_adjustment(self.adjBCycle)
         vBoxBreathe.add(self.sbBCycle)
         self.stack.add_titled(vBoxBreathe, "breathe", "Breathe")
+
+        ###SEGMENTS TAB
+        hBoxSegments = Gtk.Box(spacing=5)
+        self.segmentColorBtns = [Gtk.ColorButton() for _ in range(5)]
+        for btn in self.segmentColorBtns:
+            hBoxSegments.pack_start(btn, True, True, 0)
+        self.stack.add_titled(hBoxSegments, "segments", "Segments")
 
         ###STACK
         self.stack_switcher = Gtk.StackSwitcher()
