@@ -15,25 +15,27 @@ The "Wave" color effect that is available with the Logitech software could not b
 Clone this project with git and run `sudo make install`
 
 ### Prerequisites
-* [Python](https://www.python.org/) >= 2.4 or 3.x (which is usually already installed)
+* [Python](https://www.python.org/) 3.x (which is usually already installed)
 * [PyUSB](https://github.com/walac/pyusb) (please see their instructions on how to install)
 * [PyGObject](https://wiki.gnome.org/action/show/Projects/PyGObject)
 
 Please ignore the pcap directory, [SebiTimeWaster](https://github.com/SebiTimeWaster) added the pcap files he used for reverse engineering just in case someone wants to work with them. They can be opened with [Wireshark](https://en.wikipedia.org/wiki/Wireshark).
 
 ## Usage
+
+### Automatic
+You can find the app in your menu after installation.
+
+### Manually
 Just call the main.py script:
 
 ```Bash
 sudo python main.py
 ```
-
-Or you can find the app in your menu after installation.
-
 G213Colors needs to be run as root as long as your user doesn't have access privileges for that USB device ([How to do this](http://stackoverflow.com/a/32022908/2948666), please use "046d" as idVendor and "c336" as idProduct).
 
 ## Known issues
-* Field 4 and 5 are not controllable individually
+* Field 4 and 5 are not controllable in segments mode
 
 ## ToDo
 * fix issues :D
@@ -43,5 +45,8 @@ Changelog v0.1:
 * Initial checkin
 
 Changelog v0.2:
-* Adding segments/field support
+* Added segments/field support
 * removed color button events
+
+Changelog v0.3:
+* Added more intergration with linux systems (by [JeroenED](https://github.com/JeroenED)):
