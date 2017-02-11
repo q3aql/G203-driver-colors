@@ -2,10 +2,18 @@
 
 import G213Colors
 import gi
+import sys
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from time import sleep
 NAME = "G213 Colors"
+
+numArguments   = len(sys.argv)    # number of arguments given
+
+if numArguments > 1:
+    option     = str(sys.argv[1]) # option to use
+else:
+    option = ""
 
 
 class Window(Gtk.Window):
@@ -25,29 +33,35 @@ class Window(Gtk.Window):
         myG = G213Colors
         myG.connectG()
         myG.sendColorCommand(self.btnGetHex(self.staticColorButton))
+        myG.saveData(myG.colorCommand.format(str(format(0, '02x')), self.btnGetHex(self.staticColorButton)))
         myG.disconnectG()
 
     def sendBreathe(self):
         myG = G213Colors
         myG.connectG()
         myG.sendBreatheCommand(self.btnGetHex(self.breatheColorButton), self.sbGetValue(self.sbBCycle))
+        myG.saveData(myG.breatheCommand.format(self.breatheColorButton), str(format(self.sbGetValue(self.sbBCycle), '04x')))
         myG.disconnectG()
 
     def sendCycle(self):
         myG = G213Colors
         myG.connectG()
         myG.sendCycleCommand(self.sbGetValue(self.sbCycle))
+    	myG.saveData(myG.cycleCommand.format(str(format(self.sbGetValue(self.sbCycle), '04x'))))
         myG.disconnectG()
 
     def sendSegments(self):
         myG = G213Colors
         myG.connectG()
+        data = ""
         for i in range(1, 6):
             print(i)
             print(self.btnGetHex(self.segmentColorBtns[i-1]))
             myG.sendColorCommand(self.btnGetHex(self.segmentColorBtns[i -1]), i)
+            data += myG.colorCommand.format(str(format(i, '02x')), self.btnGetHex(self.segmentColorBtns[i -1])) + ","
             sleep(0.01)
         myG.disconnectG()
+        myG.saveData(data)
 
     def color_set_segments(self, colorbutton):
         global hexColorSegments
@@ -135,6 +149,20 @@ class Window(Gtk.Window):
         btnOk = Gtk.Button.new_with_label("OK")
         btnOk.connect("clicked", self.on_ok_button_clicked)
         vBoxMain.pack_start(btnOk, True, True, 0)
+
+
+if "-t" in option:
+	myG = G213Colors
+	myG.connectG()
+	file = open(myG.confFile, "r") 
+	commands = file.readline().split(',')
+	for command in commands:
+		print command
+		myG.sendData(command)
+		sleep(0.01)
+
+	myG.disconnectG()
+	sys.exit(0)
 
 win = Window()
 win.connect("delete-event", Gtk.main_quit)

@@ -41,6 +41,7 @@ breatheCommand = "11ff0c3a0002{}{}006400000000000000"
 cycleCommand   = "11ff0c3a0003ffffff0000{}64000000000000"
 device         = ""               # device resource
 isDetached     = False            # If kernel driver needs to be reattached
+confFile       = "/etc/G213Colors.conf"
 
 
 def connectG():
@@ -74,3 +75,8 @@ def sendBreatheCommand(colorHex, speed):
 
 def sendCycleCommand(speed):
     sendData(cycleCommand.format(str(format(speed, '04x'))))
+
+def saveData(data):
+    file = open(confFile,"w") 
+    file.write(data) 
+    file.close()
