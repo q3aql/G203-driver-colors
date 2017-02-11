@@ -12,7 +12,7 @@ Please understand that i do not support any such adaptation, if you want to do i
 The "Wave" color effect that is available with the Logitech software could not be replicated since it is completely generated in the software by updating the colors every x ms (In contrast to the other effects which run on the keyboard itself). You could generate this effect with a script, but since G213Colors has to detach the kernel driver from one of the G213's interfaces to send data out the multimedia keys would most likely stop working. Unfortunately this is a side effect of the linux driver structure.
 
 ## Installation
-Clone this project with git.
+Clone this project with git and run `sudo make install`
 
 ### Prerequisites
 * [Python](https://www.python.org/) >= 2.4 or 3.x (which is usually already installed)
@@ -27,6 +27,8 @@ Just call the main.py script:
 ```Bash
 sudo python main.py
 ```
+
+Or you can find the app in your menu after installation.
 
 G213Colors needs to be run as root as long as your user doesn't have access privileges for that USB device ([How to do this](http://stackoverflow.com/a/32022908/2948666), please use "046d" as idVendor and "c336" as idProduct).
 
