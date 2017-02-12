@@ -1,0 +1,9 @@
+[Unit]
+Description=Start G213Colors profile
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/g213colors-gui -t
+
+[Install]
+WantedBy=multi-user.target
