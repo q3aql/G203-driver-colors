@@ -63,16 +63,6 @@ class Window(Gtk.Window):
         myG.disconnectG()
         myG.saveData(data)
 
-    def color_set_segments(self, colorbutton):
-        global hexColorSegments
-        i = 0
-        for btn in self.segmentColorButtons:
-            colors = btn.get_rgba()
-            red = int(color.red * 255)
-            green = int(color.green * 255)
-            blue = int(color.blue * 255)
-            hexColorSegments[i] = "%02x%02x%02x" % (red, green, blue)
-
     def sendManager(self):
         self.stackName = self.stack.get_visible_child_name()
         if self.stackName == "static":
