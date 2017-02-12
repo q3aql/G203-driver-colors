@@ -34,8 +34,22 @@ sudo python main.py
 ```
 G213Colors needs to be run as root as long as your user doesn't have access privileges for that USB device ([How to do this](http://stackoverflow.com/a/32022908/2948666), please use "046d" as idVendor and "c336" as idProduct).
 
+### Restoring previous state
+After rebooting your pc you can restore the pre-reboot state by running the app with parameter -t
+
+```Bash
+sudo g213colors-gui -t
+```
+
+You can also do this automatically at reboot by enabling the systemd service.
+
+```Bash
+sudo systemctl enable g213colors.service
+``` 
+
 ## Known issues
 * Field 4 and 5 are not controllable in segments mode
+* Restoring segments mode setting does not work
 
 ## ToDo
 * fix issues :D
