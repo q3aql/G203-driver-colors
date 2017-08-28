@@ -1,5 +1,9 @@
 [Unit]
 Description=Start G213Colors profile
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+
 
 [Service]
 Type=oneshot
@@ -7,3 +11,8 @@ ExecStart=/usr/bin/g213colors-gui -t
 
 [Install]
 WantedBy=multi-user.target
+WantedBy=suspend.target
+WantedBy=hibernate.target
+WantedBy=hybrid-sleep.target
+
+# https://askubuntu.com/questions/661715/make-a-script-start-after-suspend-in-ubuntu-15-04-systemd
