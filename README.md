@@ -69,4 +69,7 @@ Changelog v0.2:
 * removed color button events
 
 Changelog v0.3:
-* Added more intergration with linux systems (by [JeroenED](https://github.com/JeroenED)):
+* Added more intergration with linux systems (by [JeroenED](https://github.com/JeroenED))
+
+Changelog v0.4:
+* Added support for G203 mouse
