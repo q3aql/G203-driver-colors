@@ -23,6 +23,7 @@
 '''
 
 
+from __future__ import print_function
 import sys
 import usb.core
 import usb.util
@@ -31,52 +32,81 @@ import binascii
 
 standardColor  = 'ffb4aa'         # Standard color, i found this color to produce a white color on my G213
 idVendor       = 0x046d           # The id of the Logitech company
-idProduct      = 0xc336           # The id of the G213
-bmRequestType  = 0x21             # --.
-bmRequest      = 0x09             #    \ The controll transfer
-wValue         = 0x0211           #    / configuration for the G213
-wIndex         = 0x0001           # --'
-colorCommand   = "11ff0c3a{}01{}0200000000000000000000"   # binary commands in hex format
-breatheCommand = "11ff0c3a0002{}{}006400000000000000"
-cycleCommand   = "11ff0c3a0003ffffff0000{}64000000000000"
+idProduct      = {"G213": 0xc336, # The id of the G213
+                  "G203": 0xc084} # The id of the G203
+
+#  The USB controll transfer parameters
+bmRequestType  = 0x21
+bmRequest      = 0x09
+wValue         = {"G213": 0x0211,
+                  "G203": 0x0210}
+wIndex         = 0x0001
+
+# binary commands in hex format
+deviceCmdByte = {"G213": "0c", # Used to make commands universal,
+                 "G203": "0e"} # feel free to find a better name
+colorCommand   = {"G213": "11ff0c3a{}01{}0200000000000000000000",
+                  "G203": "11ff0e3c{}01{}0200000000000000000000"} # field; color
+breatheCommand = {"G213": "11ff0c3a0002{}{}006400000000000000",
+                  "G203": "11ff0e3c0003{}{}006400000000000000"}     # color; speed
+cycleCommand   = {"G213": "11ff0c3a0003ffffff0000{}64000000000000",
+                  "G203": "11ff0e3c00020000000000{}64000000000000"}  # speed; brightness
+
 device         = ""               # device resource
-isDetached     = False            # If kernel driver needs to be reattached
+productName    = ""               # e.g. G213, G203
+isDetached     = {"G213": False,  # If kernel driver needs to be reattached
+                  "G203": False}
 confFile       = "/etc/G213Colors.conf"
 
 
-def connectG():
-    global device, isDetached
+def connectG(Name):
+    global device, isDetached, productName
+    productName = Name
+    print(productName)
     # find G product
-    device = usb.core.find(idVendor = idVendor, idProduct = idProduct)
+    device = usb.core.find(idVendor=idVendor, idProduct=idProduct[productName])
     # if not found exit
+    #print(device.manufacturer)
     if device is None:
         raise ValueError("USB device not found!")
     # if a kernel driver is attached to the interface detach it, otherwise no data can be send
     if device.is_kernel_driver_active(wIndex):
         device.detach_kernel_driver(wIndex)
-        isDetached = True
+        isDetached[productName] = True
+        print("Connected " + productName)
+
 
 def disconnectG():
+    global productName
     # free device resource to be able to reattach kernel driver
     usb.util.dispose_resources(device)
     # reattach kernel driver, otherwise special key will not work
-    if isDetached:
+    if isDetached[productName]:
         device.attach_kernel_driver(wIndex)
+        print("Disconnected " + productName)
 
 def sendData(data):
+    global productName
+    print("Send data to " + productName)
+    print("bmRequestType, bmRequest, wValue[productName], wIndex, binascii.unhexlify(data)")
+    print(bmRequestType, bmRequest, wValue[productName], wIndex, binascii.unhexlify(data))
+    # free device resource to uest, wValue[productName], wIndex, binascii.unhexlify(data))
     # decode data to binary and send it
-    device.ctrl_transfer(bmRequestType, bmRequest, wValue, wIndex, binascii.unhexlify(data))
+    device.ctrl_transfer(bmRequestType, bmRequest, wValue[productName], wIndex, binascii.unhexlify(data))
 
-def sendColorCommand(colorHex, field = 0):
-    sendData(colorCommand.format(str(format(field, '02x')), colorHex))
+def sendColorCommand(colorHex, field=0):
+    global productName
+    sendData(colorCommand[productName].format(str(format(field, '02x')), colorHex))
 
 def sendBreatheCommand(colorHex, speed):
-    sendData(breatheCommand.format(colorHex, str(format(speed, '04x'))))
+    global productName
+    sendData(breatheCommand[productName].format(colorHex, str(format(speed, '04x'))))
 
 def sendCycleCommand(speed):
-    sendData(cycleCommand.format(str(format(speed, '04x'))))
+    global productName
+    sendData(cycleCommand[productName].format(str(format(speed, '04x'))))
 
 def saveData(data):
-    file = open(confFile,"w") 
-    file.write(data) 
+    file = open(confFile, "w")
+    file.write(data)
     file.close()

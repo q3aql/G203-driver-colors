@@ -1,17 +1,20 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import G213Colors
 import gi
 import sys
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from time import sleep
-NAME = "G213 Colors"
 
-numArguments   = len(sys.argv)    # number of arguments given
+NAME = "G213 Colors"
+PRODUCTS = ["G213", "G203"]
+
+numArguments = len(sys.argv)    # number of arguments given
 
 if numArguments > 1:
-    option     = str(sys.argv[1]) # option to use
+    option = str(sys.argv[1]) # option to use
 else:
     option = ""
 
@@ -29,30 +32,33 @@ class Window(Gtk.Window):
     def sbGetValue(self, sb):
         return sb.get_value_as_int()
 
-    def sendStatic(self):
+    def sendStatic(self, product):
         myG = G213Colors
-        myG.connectG()
+        myG.connectG(product)
         myG.sendColorCommand(self.btnGetHex(self.staticColorButton))
-        myG.saveData(myG.colorCommand.format(str(format(0, '02x')), self.btnGetHex(self.staticColorButton)))
+        if product == "G213":
+            myG.saveData(myG.colorCommand.format(str(format(0, '02x')), self.btnGetHex(self.staticColorButton)))
         myG.disconnectG()
 
-    def sendBreathe(self):
+    def sendBreathe(self, product):
         myG = G213Colors
-        myG.connectG()
+        myG.connectG(product)
         myG.sendBreatheCommand(self.btnGetHex(self.breatheColorButton), self.sbGetValue(self.sbBCycle))
-        myG.saveData(myG.breatheCommand.format(self.breatheColorButton), str(format(self.sbGetValue(self.sbBCycle), '04x')))
+        if product == "G213":
+            myG.saveData(myG.breatheCommand.format(self.breatheColorButton), str(format(self.sbGetValue(self.sbBCycle), '04x')))
         myG.disconnectG()
 
-    def sendCycle(self):
+    def sendCycle(self, product):
         myG = G213Colors
-        myG.connectG()
+        myG.connectG(product)
         myG.sendCycleCommand(self.sbGetValue(self.sbCycle))
-    	myG.saveData(myG.cycleCommand.format(str(format(self.sbGetValue(self.sbCycle), '04x'))))
+        if product == "G213":
+            myG.saveData(myG.cycleCommand.format(str(format(self.sbGetValue(self.sbCycle), '04x'))))
         myG.disconnectG()
 
     def sendSegments(self):
         myG = G213Colors
-        myG.connectG()
+        myG.connectG("G213")
         data = ""
         for i in range(1, 6):
             print(i)
@@ -61,27 +67,32 @@ class Window(Gtk.Window):
             data += myG.colorCommand.format(str(format(i, '02x')), self.btnGetHex(self.segmentColorBtns[i -1])) + ","
             sleep(0.01)
         myG.disconnectG()
-        myG.saveData(data)
+        if product == "G213":
+            myG.saveData(data)
 
-    def sendManager(self):
-        self.stackName = self.stack.get_visible_child_name()
-        if self.stackName == "static":
-            self.sendStatic()
-        elif self.stackName == "cycle":
-            self.sendCycle()
-        elif self.stackName == "breathe":
-            self.sendBreathe()
-        elif self.stackName == "segments":
-            self.sendSegments()
+    def sendManager(self, product):
+        if product == "all":
+            for p in PRODUCTS:
+                self.sendManager(p)
+        else:
+            self.stackName = self.stack.get_visible_child_name()
+            if self.stackName == "static":
+                self.sendStatic(product)
+            elif self.stackName == "cycle":
+                self.sendCycle(product)
+            elif self.stackName == "breathe":
+                self.sendBreathe("G203")
+            elif self.stackName == "segments":
+                self.sendSegments(product)
 
-    def on_ok_button_clicked(self, button):
+    def on_button_clicked(self, button, product):
         global ctime
         global btime
         ctime = self.sbCycle.get_value_as_int()
         btime = self.sbBCycle.get_value_as_int()
         print(ctime)
         print(self.stack.get_visible_child_name())
-        self.sendManager()
+        self.sendManager(product)
 
     def __init__(self):
 
@@ -135,24 +146,33 @@ class Window(Gtk.Window):
         vBoxMain.pack_start(self.stack_switcher, True, True, 0)
         vBoxMain.pack_start(self.stack, True, True, 0)
 
-        ###OK BUTTON
-        btnOk = Gtk.Button.new_with_label("OK")
-        btnOk.connect("clicked", self.on_ok_button_clicked)
-        vBoxMain.pack_start(btnOk, True, True, 0)
+        ###SET BUTTONS
+        hBoxSetButtons = Gtk.Box(spacing=5)
+        self.setColorBtns = []
+        for p in PRODUCTS:
+            btn = Gtk.Button.new_with_label("Set" + p)
+            hBoxSetButtons.pack_start(btn, True, True, 0)
+            btn.connect("clicked", self.on_button_clicked, p)
+        vBoxMain.pack_start(hBoxSetButtons, True, True, 0)
+
+        ###SET ALL BUTTON
+        btnSetAll = Gtk.Button.new_with_label("Set all")
+        btnSetAll.connect("clicked", self.on_button_clicked, "all")
+        vBoxMain.pack_start(btnSetAll, True, True, 0)
 
 
 if "-t" in option:
-	myG = G213Colors
-	myG.connectG()
-	file = open(myG.confFile, "r") 
-	commands = file.readline().split(',')
-	for command in commands:
-		print command
-		myG.sendData(command)
-		sleep(0.01)
+    myG = G213Colors
+    myG.connectG()
+    file = open(myG.confFile, "r")
+    commands = file.readline().split(',')
+    for command in commands:
+        print(command)
+        myG.sendData(command)
+        sleep(0.01)
 
-	myG.disconnectG()
-	sys.exit(0)
+    myG.disconnectG()
+    sys.exit(0)
 
 win = Window()
 win.connect("delete-event", Gtk.main_quit)
