@@ -43,8 +43,6 @@ wValue         = {"G213": 0x0211,
 wIndex         = 0x0001
 
 # binary commands in hex format
-deviceCmdByte = {"G213": "0c", # Used to make commands universal,
-                 "G203": "0e"} # feel free to find a better name
 colorCommand   = {"G213": "11ff0c3a{}01{}0200000000000000000000",
                   "G203": "11ff0e3c{}01{}0200000000000000000000"} # field; color
 breatheCommand = {"G213": "11ff0c3a0002{}{}006400000000000000",

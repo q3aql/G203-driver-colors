@@ -1,13 +1,19 @@
 # G213Colors
 A application to change the key colors on a Logitech G213 Prodigy Gaming Keyboard using [SebiTimeWaster](https://github.com/SebiTimeWaster)'s [G213Colors](https://github.com/SebiTimeWaster/G213Colors).
 
+## Supported devices
+
+* G213 keyboard
+* G203 mouse
+
 ## What it does
-G213Colors lets you set the color(s) and certain effects of the illuminated keys on a G213 keyboard under Linux.
+G213Colors lets you set the color(s) and certain effects of the illuminated keys on a G213 keyboard and G203 mouse under Linux.
 
 Since Logitech is mostly ignoring the Linux market with their "Logitech Gaming Software" but i also wanted to use my expensive new keyboard also under linux without tolerating the color cycling animation all the time. So i searched on the internet and added a gui to [SebiTimeWaster's project](https://github.com/SebiTimeWaster/G213Colors) for comfortable usage.
 
-G213Colors was built and tested under Linux for the G213 keyboard specifically, but after some adaptation it could potentially be run under other OS'es and used for other Logitech keyboards as well.
-Please understand that i do not support any such adaptation, if you want to do it **you are on your own**.
+G213Colors was built and tested under Linux for the G213 keyboard and G203 mouse specifically, but after some adaptation it could potentially be run under other OS'es and used for other Logitech devices as well.
+
+If you have any Logitech keyboard or mouse that is not supported feel free to open an issue and/or contact me via Email: git(AT)eiselecloud(DOT)de
 
 The "Wave" color effect that is available with the Logitech software could not be replicated since it is completely generated in the software by updating the colors every x ms (In contrast to the other effects which run on the keyboard itself). You could generate this effect with a script, but since G213Colors has to detach the kernel driver from one of the G213's interfaces to send data out the multimedia keys would most likely stop working. Unfortunately this is a side effect of the linux driver structure.
 
@@ -45,7 +51,7 @@ You can also do this automatically at reboot by enabling the systemd service.
 
 ```Bash
 sudo systemctl enable g213colors.service
-``` 
+```
 
 ## Known issues
 * Field 4 and 5 are not controllable in segments mode

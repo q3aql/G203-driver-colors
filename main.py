@@ -37,7 +37,7 @@ class Window(Gtk.Window):
         myG.connectG(product)
         myG.sendColorCommand(self.btnGetHex(self.staticColorButton))
         if product == "G213":
-            myG.saveData(myG.colorCommand.format(str(format(0, '02x')), self.btnGetHex(self.staticColorButton)))
+            myG.saveData(myG.colorCommand[product].format(str(format(0, '02x')), self.btnGetHex(self.staticColorButton)))
         myG.disconnectG()
 
     def sendBreathe(self, product):
@@ -45,7 +45,7 @@ class Window(Gtk.Window):
         myG.connectG(product)
         myG.sendBreatheCommand(self.btnGetHex(self.breatheColorButton), self.sbGetValue(self.sbBCycle))
         if product == "G213":
-            myG.saveData(myG.breatheCommand.format(self.breatheColorButton), str(format(self.sbGetValue(self.sbBCycle), '04x')))
+            myG.saveData(myG.breatheCommand[product].format(self.breatheColorButton, str(format(self.sbGetValue(self.sbBCycle), '04x'))))
         myG.disconnectG()
 
     def sendCycle(self, product):
@@ -53,7 +53,7 @@ class Window(Gtk.Window):
         myG.connectG(product)
         myG.sendCycleCommand(self.sbGetValue(self.sbCycle))
         if product == "G213":
-            myG.saveData(myG.cycleCommand.format(str(format(self.sbGetValue(self.sbCycle), '04x'))))
+            myG.saveData(myG.cycleCommand[product].format(str(format(self.sbGetValue(self.sbCycle), '04x'))))
         myG.disconnectG()
 
     def sendSegments(self):
@@ -81,7 +81,7 @@ class Window(Gtk.Window):
             elif self.stackName == "cycle":
                 self.sendCycle(product)
             elif self.stackName == "breathe":
-                self.sendBreathe("G203")
+                self.sendBreathe(product)
             elif self.stackName == "segments":
                 self.sendSegments(product)
 
