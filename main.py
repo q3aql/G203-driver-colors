@@ -45,7 +45,7 @@ class Window(Gtk.Window):
         myG.connectG(product)
         myG.sendBreatheCommand(self.btnGetHex(self.breatheColorButton), self.sbGetValue(self.sbBCycle))
         if product == "G213":
-            myG.saveData(myG.breatheCommand[product].format(self.breatheColorButton, str(format(self.sbGetValue(self.sbBCycle), '04x'))))
+            myG.saveData(myG.breatheCommand[product].format(self.btnGetHex(self.breatheColorButton), str(format(self.sbGetValue(self.sbBCycle), '04x'))))
         myG.disconnectG()
 
     def sendCycle(self, product):
@@ -163,7 +163,7 @@ class Window(Gtk.Window):
 
 if "-t" in option:
     myG = G213Colors
-    myG.connectG()
+    myG.connectG("G213")
     file = open(myG.confFile, "r")
     commands = file.readline().split(',')
     for command in commands:
