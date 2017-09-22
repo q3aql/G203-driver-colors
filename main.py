@@ -56,15 +56,15 @@ class Window(Gtk.Window):
             myG.saveData(myG.cycleCommand[product].format(str(format(self.sbGetValue(self.sbCycle), '04x'))))
         myG.disconnectG()
 
-    def sendSegments(self):
+    def sendSegments(self, product):
         myG = G213Colors
-        myG.connectG("G213")
+        myG.connectG(product)
         data = ""
         for i in range(1, 6):
             print(i)
             print(self.btnGetHex(self.segmentColorBtns[i-1]))
             myG.sendColorCommand(self.btnGetHex(self.segmentColorBtns[i -1]), i)
-            data += myG.colorCommand.format(str(format(i, '02x')), self.btnGetHex(self.segmentColorBtns[i -1])) + ","
+            data += myG.colorCommand[product].format(str(format(i, '02x')), self.btnGetHex(self.segmentColorBtns[i -1])) + ","
             sleep(0.01)
         myG.disconnectG()
         if product == "G213":
