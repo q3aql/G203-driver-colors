@@ -87,7 +87,7 @@ def disconnectG():
         print("Disconnected " + productName)
 
 def receiveData():
-    device.read(0x82, 64)
+    device.read(0x81, 64)
 
 def sendData(data):
     global productName
