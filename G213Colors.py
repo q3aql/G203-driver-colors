@@ -50,6 +50,9 @@ breatheCommand = {"G213": "11ff0c3a0002{}{}006400000000000000",
 cycleCommand   = {"G213": "11ff0c3a0003ffffff0000{}64000000000000",
                   "G203": "11ff0e3c00020000000000{}64000000000000"}  # speed; brightness
 
+# not believe that this is exactly "reset"
+resetCommand   = "11ff0c0c00000000000000000000000000000000"
+
 device         = ""               # device resource
 productName    = ""               # e.g. G213, G203
 isDetached     = {"G213": False,  # If kernel driver needs to be reattached
@@ -83,6 +86,9 @@ def disconnectG():
         device.attach_kernel_driver(wIndex)
         print("Disconnected " + productName)
 
+def receiveData():
+    device.read(0x82, 64)
+
 def sendData(data):
     global productName
     print("Send data to " + productName)
@@ -94,7 +100,16 @@ def sendData(data):
 
 def sendColorCommand(colorHex, field=0):
     global productName
+
+    if productName == "G213":
+        device.set_configuration()
+        sendData(resetCommand)
+        receiveData()
+
     sendData(colorCommand[productName].format(str(format(field, '02x')), colorHex))
+
+    if productName == "G213":
+        receiveData()
 
 def sendBreatheCommand(colorHex, speed):
     global productName
