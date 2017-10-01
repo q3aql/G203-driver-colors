@@ -28,6 +28,7 @@ import sys
 import usb.core
 import usb.util
 import binascii
+import platform
 
 
 standardColor  = 'ffb4aa'         # Standard color, i found this color to produce a white color on my G213
@@ -98,7 +99,7 @@ def sendData(data):
 def sendColorCommand(colorHex, field=0):
     global productName
 
-    if productName == "G213":
+    if productName == "G213" and platform.system() == "Windows":
         device.set_configuration()
 
     sendData(colorCommand[productName].format(str(format(field, '02x')), colorHex))
