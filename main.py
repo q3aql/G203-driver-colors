@@ -4,6 +4,7 @@ from __future__ import print_function
 import G213Colors
 import gi
 import sys
+import platform
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from time import sleep
@@ -64,7 +65,7 @@ class Window(Gtk.Window):
             print(i)
             print(self.btnGetHex(self.segmentColorBtns[i-1]))
             myG.sendColorCommand(self.btnGetHex(self.segmentColorBtns[i -1]), i)
-            data += myG.colorCommand[product].format(str(format(i, '02x')), self.btnGetHex(self.segmentColorBtns[i -1])) + ","
+            data += myG.colorCommand[product].format(str(format(i, '02x')), self.btnGetHex(self.segmentColorBtns[i -1])) + "\n"
             sleep(0.01)
         myG.disconnectG()
         if product == "G213":
@@ -164,12 +165,22 @@ class Window(Gtk.Window):
 if "-t" in option:
     myG = G213Colors
     myG.connectG("G213")
-    file = open(myG.confFile, "r")
-    commands = file.readline().split(',')
-    for command in commands:
-        print(command)
-        myG.sendData(command)
-        sleep(0.01)
+
+    with open(myG.confFile, "r") as file:
+
+        for command in file:
+            print(command)
+            command = command.strip()
+            if command and "," not in command:
+                if platform.system() == "Windows":
+                    myG.device.set_configuration()
+                myG.sendData(command)
+                myG.receiveData()
+                sleep(0.01)
+
+            if "," in command:
+                print("\",\" is not supported in the config file.")
+                print("If you apply a color scheme with segments, please re-apply it or replace all \",\" with new lines in \"/etc/G213Colors.conf\".")
 
     myG.disconnectG()
     sys.exit(0)
