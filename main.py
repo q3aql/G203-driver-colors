@@ -172,8 +172,6 @@ if "-t" in option:
             print(command)
             command = command.strip()
             if command and "," not in command:
-                if platform.system() == "Windows":
-                    myG.device.set_configuration()
                 myG.sendData(command)
                 myG.receiveData()
                 sleep(0.01)
