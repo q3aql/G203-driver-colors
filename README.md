@@ -60,11 +60,10 @@ sudo systemctl enable g213colors.service
 ```
 
 ## Known issues
-* Field 4 and 5 are not controllable in segments mode
-* Restoring segments mode setting does not work
+
 
 ## ToDo
-* fix issues :D
+
 
 ## Changelog
 Changelog v0.1:
@@ -79,3 +78,6 @@ Changelog v0.3:
 
 Changelog v0.4:
 * Added support for G203 mouse
+
+Changelog v0.5:
+* Finally fixed incontrollable segments bug (with the help of [Oncecreated](https://github.com/oncecreated))
