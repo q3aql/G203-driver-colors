@@ -28,6 +28,7 @@ import sys
 import usb.core
 import usb.util
 import binascii
+import platform
 
 
 standardColor  = 'ffb4aa'         # Standard color, i found this color to produce a white color on my G213
@@ -83,6 +84,9 @@ def disconnectG():
         device.attach_kernel_driver(wIndex)
         print("Disconnected " + productName)
 
+def receiveData():
+    device.read(0x82, 64)
+
 def sendData(data):
     global productName
     print("Send data to " + productName)
@@ -94,7 +98,11 @@ def sendData(data):
 
 def sendColorCommand(colorHex, field=0):
     global productName
+
     sendData(colorCommand[productName].format(str(format(field, '02x')), colorHex))
+
+    if productName == "G213":
+        receiveData()
 
 def sendBreatheCommand(colorHex, speed):
     global productName
