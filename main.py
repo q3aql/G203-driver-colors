@@ -2,12 +2,11 @@
 
 from __future__ import print_function
 import G213Colors
+from time import sleep
 import gi
 import sys
-import platform
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from time import sleep
 
 NAME = "G213 Colors"
 PRODUCTS = ["G213", "G203"]

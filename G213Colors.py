@@ -24,11 +24,9 @@
 
 
 from __future__ import print_function
-import sys
 import usb.core
 import usb.util
 import binascii
-import platform
 
 
 standardColor  = 'ffb4aa'         # Standard color, i found this color to produce a white color on my G213
