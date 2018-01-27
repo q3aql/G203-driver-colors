@@ -21,7 +21,7 @@ G213Colors was built and tested under Linux for the G213 keyboard and G203 mouse
 
 If you have any Logitech keyboard or mouse that is not supported feel free to open an issue and/or contact me via Email: git(AT)eiselecloud(DOT)de
 
-The "Wave" color effect that is available with the Logitech software could not be replicated since it is completely generated in the software by updating the colors every x ms (In contrast to the other effects which run on the keyboard itself). You could generate this effect with a script, but since G213Colors has to detach the kernel driver from one of the G213's interfaces to send data out the multimedia keys would most likely stop wukos-git-patch-1orking. Unfortunately this is a side effect of the linux driver structure.
+The "Wave" color effect that is available with the Logitech software could not be replicated since it is completely generated in the software by updating the colors every x ms (In contrast to the other effects which run on the keyboard itself). You could generate this effect with a script, but since G213Colors has to detach the kernel driver from one of the G213's interfaces to send data out the multimedia keys would most likely stop working. Unfortunately this is a side effect of the linux driver structure.
 
 ## Installation
 Clone this project with git and run `sudo make install`
