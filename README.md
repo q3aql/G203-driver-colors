@@ -44,7 +44,7 @@ Just call the main.py script:
 ```Bash
 sudo python main.py
 ```
-G213Colors needs to be run as root as long as your user doesn't have access privileges for that USB device ([How to do this](http://stackoverflow.com/a/32022908/2948666), please use "046d" as idVendor and "c336" as idProduct).
+G213Colors needs to be run as root as long as your user doesn't have access privileges for that USB device ([How to do this](https://stackoverflow.com/a/48477830/7809404), please use "046d" as idVendor and "c336" as idProduct).
 
 ### Restoring previous state
 After rebooting your pc you can restore the pre-reboot state by running the app with parameter -t
