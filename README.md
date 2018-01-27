@@ -39,12 +39,14 @@ Please ignore the pcap directory, [SebiTimeWaster](https://github.com/SebiTimeWa
 You can find the app in your menu after installation.
 
 ### Manually
-Just call the main.py script:
+You can call the `main.py` script like this:
 
 ```Bash
-sudo python main.py
+python main.py
 ```
-G213Colors needs to be run as root as long as your user doesn't have access privileges for that USB device ([How to do this](http://stackoverflow.com/a/32022908/2948666), please use "046d" as idVendor and "c336" as idProduct).
+
+G213Colors needs to be run as root as long as long as your user doesn't have access privileges for the USB device.
+In order to run the program without root privileges you have to create a [udev rule](https://wiki.archlinux.org/index.php/udev#About_udev_rules) for your device and add your user to the plugdev group. See [how this is done on stackexchange](https://stackoverflow.com/a/48477830/7809404). `idVendor` is *046d* for Logitech. `idProduct` depends on your device. Use `lsusb | grep Logitech` to determine the Id.
 
 ### Restoring previous state
 After rebooting your pc you can restore the pre-reboot state by running the app with parameter -t
