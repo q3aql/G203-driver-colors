@@ -1,5 +1,5 @@
 # G203 Prodigy Driver
-A application to change the key colors on a Logitech G203 Prodigy Gaming Mouse.
+A application to change the colors on a Logitech G203 Prodigy Gaming Mouse.
 
 ## Supported devices
 
