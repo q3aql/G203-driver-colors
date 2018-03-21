@@ -1,4 +1,0 @@
-Data: 11 ff 0e 3c 00 02 00 00 00 00 00 SS SS BB 00 00 00 00 00 00
-S = Speed
-BB = brightness
-Filter: "frame.len == 48"

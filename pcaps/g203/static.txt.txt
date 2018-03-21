@@ -1,5 +1,0 @@
-Data: 11 ff 0e 3c 00 01 CC CC CC 02 00 00 00 00 00 00 00 00 00 00
-C: Color
-Color: 0 128 255 = 00 80 ff
-Filter: frame.len == 48
-Data is visible in entry no. 10
