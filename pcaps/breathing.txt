@@ -1,0 +1,5 @@
+Data: 11 ff 0e 3c 00 03 CC CC CC SS SS 00 BB 00 00 00 00 00 00 00
+C = Color
+B = Brightness
+S = Speed
+Filter: frame.len == 48
