@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=G203 Prodigy Driver
+Exec=gksudo g203-driver.py
+Comment=A gui to change the key colors on a Logitech G203 Prodigy Mouse 
+Icon=g203colors
+Type=Application
+Categories=Settings;Utility;
